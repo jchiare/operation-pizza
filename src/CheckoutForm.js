@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import { CardElement, injectStripe } from "react-stripe-elements";
+import PizzaOrder from "./components/PizzaOrder";
 import "./App.css";
 
 const createOptions = {
@@ -49,6 +50,7 @@ class CheckoutForm extends Component {
     if (this.state.complete) return <h1>Purchase Complete</h1>;
     return (
       <form onSubmit={this.submit}>
+        <PizzaOrder />
         <label>
           Card details
           <CardElement {...createOptions} />

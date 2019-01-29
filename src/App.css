@@ -93,7 +93,6 @@ input:focus,
   transition: all 150ms ease;
 }
 
-.StripeElement.IdealBankElement,
-.StripeElement.PaymentRequestButton {
-  padding: 0;
+.main {
+  margin:4em;
 }
