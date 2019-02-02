@@ -32,14 +32,13 @@ class CheckoutForm extends Component {
     const { token } = await this.props.stripe.createToken({ name: "George" });
     const response = await fetch("/charge", {
       method: "POST",
-      headers: { "Content-Type": "text/plain" },
       body: token.id
     });
 
     const data = await response.json();
 
     if (response.ok) {
-      console.log(data);
+      console.log("response ok!!!" + JSON.stringify(data));
       this.setState({ complete: true });
     } else {
       console.log("no ok response \n" + data);
