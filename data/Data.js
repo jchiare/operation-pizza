@@ -26,28 +26,43 @@ const GetPizzaData = () => {
     });
 };
 
-const AddPizzaData = (child, parent, order) => {
-  ordersRef
+/*
+
+Add pizza order data
+
+Return a promise
+*/
+
+async function AddPizzaData({
+  child_name,
+  email,
+  grade,
+  order_type,
+  parent_name,
+  quantity_pizza,
+  teacher
+}) {
+  const AddData = ordersRef
     .add({
       child: {
-        grade: child["grade"],
-        name: child["name"],
-        teacher: child["teacher"]
+        grade,
+        name: child_name,
+        teacher
       },
       order: {
-        notes: order["notes"],
-        slices: order["slices"],
-        type: order["type"]
+        slices: quantity_pizza,
+        type: order_type
       },
       parent: {
-        email: parent["email"],
-        name: parent["name"]
+        email,
+        name: parent_name
       },
       timestamp: moment().format("MMMM Do YYYY, h:mm:ss a")
     })
     .then(ref => {
-      console.log("Added document with ID: ", ref.id);
+      return ref.id;
     });
-};
+  return AddData;
+}
 
 module.exports = { GetPizzaData, AddPizzaData };

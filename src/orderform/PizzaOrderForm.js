@@ -1,51 +1,42 @@
-import React from "react";
+import React, { Component } from "react";
 import { Formik, Form, Field, ErrorMessage } from "formik";
-import * as Yup from "yup";
-import "../stylesheets/pizzaorderstyles.css";
-
-const FormSchema = Yup.object().shape({
-  parent_name: Yup.string()
-    .min(2, "Too Short!")
-    .max(70, "Too Long!")
-    .required("First name is required"),
-  email: Yup.string()
-    .email("Invalid email")
-    .required("Email is required"),
-  order_type: Yup.string().required("Must choose pizza ..silly"),
-  quantity_pizza: Yup.number()
-    .moreThan(0, "Must have 1 or more slices")
-    .required("Number of slices required"),
-  grade: Yup.number()
-    .moreThan(0, "Grade too low")
-    .lessThan(13, "Grade too high"),
-  teacher: Yup.string()
-    .min(2, "Too short!")
-    .required("Must be a teacher name")
-});
+import { FormSchema } from "./helpers/FormValidation";
+import "./pizzaorderstyles.css";
 
 const Error = props => {
   return <p className="error">{props.children}</p>;
 };
 
-export class PizzaOrderForm extends React.Component {
-  handleSubmit = (values, { setSubmitting }) => {
-    console.log(values);
-    alert(JSON.stringify(values));
+export class PizzaOrderForm extends Component {
+  async handleSubmit(values, { setSubmitting }) {
+    const response = await fetch("/pizzaorder", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({
+        values
+      })
+    });
+    const data = await response.json();
+    if (response.ok) {
+      alert(data); // do something with data
+    }
     setSubmitting(false);
     return;
-  };
+  }
 
   render() {
     return (
       <Formik
         initialValues={{
-          parent_name: "",
-          email: "",
-          order_type: "",
-          quantity_pizza: 0,
-          child_name: "",
-          grade: 0,
-          teacher: ""
+          parent_name: "Jay",
+          email: "jay@msn.com",
+          order_type: "cheese",
+          quantity_pizza: 1,
+          child_name: "Dean",
+          grade: 6,
+          teacher: "ms denny"
         }}
         validationSchema={FormSchema}
         onSubmit={this.handleSubmit}
@@ -100,7 +91,9 @@ export class PizzaOrderForm extends React.Component {
                 <ErrorMessage component={Error} name="teacher" />
               </div>
 
-              <button type="submit">Submit Form</button>
+              <button type="submit" disabled={formProps.isSubmitting}>
+                Submit Form
+              </button>
             </Form>
           );
         }}

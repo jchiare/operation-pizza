@@ -1,6 +1,7 @@
 require("dotenv").config();
 
-const GetPizzaData = require("./src/data/GetData").GetPizzaData;
+const GetPizzaData = require("./data/Data").GetPizzaData;
+const AddPizzaData = require("./data/Data").AddPizzaData;
 const app = require("express")();
 const stripe = require("stripe")(process.env.TEST_STRIPE_SERVER_KEY);
 
@@ -8,17 +9,26 @@ app.use(require("body-parser").json());
 
 app.post("/charge", async (req, res) => {
   try {
-    console.log(req.body);
-    let response = await stripe.charges.create({
+    const response = await stripe.charges.create({
       amount: 2000,
       currency: "usd",
       description: "An example charge",
       source: req.body.stripe_token
     });
     GetPizzaData();
-    res.json(response);
+    res.status(201).json(response);
   } catch (err) {
-    console.log(err);
+    console.error(err);
+    res.status(500).end();
+  }
+});
+
+app.post("/pizzaorder", async (req, res) => {
+  try {
+    const response = await AddPizzaData(req.body.values);
+    res.status(201).json(response);
+  } catch (err) {
+    console.error(err);
     res.status(500).end();
   }
 });

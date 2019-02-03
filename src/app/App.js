@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { Elements, StripeProvider } from "react-stripe-elements";
-import CheckoutForm from "./CheckoutForm";
+import CheckoutForm from "../stripe/CheckoutForm";
 import "./App.css";
 
 class App extends Component {
@@ -9,7 +9,7 @@ class App extends Component {
       <div className="main">
         <StripeProvider apiKey="pk_test_ykmAFdExAYtRqxOEC5dUXccd">
           <div className="example">
-            <h1>React Stripe Elements Example</h1>
+            <h1>Operation Pizza</h1>
             <Elements>
               <CheckoutForm />
             </Elements>

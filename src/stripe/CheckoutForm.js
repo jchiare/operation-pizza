@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import { CardElement, injectStripe } from "react-stripe-elements";
-import { PizzaOrderForm } from "./components/PizzaOrderForm";
-import "./App.css";
+import { PizzaOrderForm } from "../orderform/PizzaOrderForm";
+import ".././app/App.css";
 
 const createOptions = {
   style: {
@@ -34,7 +34,6 @@ class CheckoutForm extends Component {
     const response = await fetch("/charge", {
       method: "POST",
       headers: {
-        Accept: "application/json",
         "Content-Type": "application/json"
       },
       body: JSON.stringify({
