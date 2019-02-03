@@ -4,7 +4,7 @@ const GetPizzaData = require("./src/data/GetData").GetPizzaData;
 const app = require("express")();
 const stripe = require("stripe")(process.env.TEST_STRIPE_SERVER_KEY);
 
-app.use(require("body-parser").text());
+app.use(require("body-parser").json());
 
 app.post("/charge", async (req, res) => {
   try {
@@ -13,7 +13,7 @@ app.post("/charge", async (req, res) => {
       amount: 2000,
       currency: "usd",
       description: "An example charge",
-      source: req.body
+      source: req.body.stripe_token
     });
     GetPizzaData();
     res.json(response);

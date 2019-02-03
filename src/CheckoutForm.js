@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { CardElement, injectStripe } from "react-stripe-elements";
-import PizzaOrder from "./components/PizzaOrder";
+import { PizzaOrderForm } from "./components/PizzaOrderForm";
 import "./App.css";
 
 const createOptions = {
@@ -29,10 +29,17 @@ class CheckoutForm extends Component {
 
   async submit(ev) {
     ev.preventDefault();
+    console.log(ev.target);
     const { token } = await this.props.stripe.createToken({ name: "George" });
     const response = await fetch("/charge", {
       method: "POST",
-      body: token.id
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({
+        stripe_token: token.id
+      })
     });
 
     const data = await response.json();
@@ -41,21 +48,23 @@ class CheckoutForm extends Component {
       console.log("response ok!!!" + JSON.stringify(data));
       this.setState({ complete: true });
     } else {
-      console.log("no ok response \n" + data);
+      console.log("no ok response \n" + JSON.stringify(data));
     }
   }
 
   render() {
     if (this.state.complete) return <h1>Purchase Complete</h1>;
     return (
-      <form onSubmit={this.submit}>
-        <PizzaOrder />
-        <label>
-          Card details
-          <CardElement {...createOptions} />
-        </label>
-        <button>Pay</button>
-      </form>
+      <div>
+        <PizzaOrderForm />
+        <form onSubmit={this.submit}>
+          <label>
+            Card details
+            <CardElement {...createOptions} />
+          </label>
+          <button>Pay</button>
+        </form>
+      </div>
     );
   }
 }
