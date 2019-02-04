@@ -25,3 +25,6 @@ yarn-error.log*
 
 #firebase credentials 
 firebase.json
+
+#vscode stuff
+.vscode
